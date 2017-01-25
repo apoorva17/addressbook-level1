@@ -475,14 +475,35 @@ public class AddressBook {
         final ArrayList<String[]> matchedPersons = new ArrayList<>();
         for (String[] person : getAllPersonsInAddressBook()) {
             final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
-            if (!Collections.disjoint(wordsInName, keywords)) {
+            /*if (!Collections.disjoint(wordsInName, keywords)) {
                 matchedPersons.add(person);
+            }*/
+            if(keyMatchName(keywords, wordsInName)){
+            	matchedPersons.add(person);
             }
         }
         return matchedPersons;
     }
-
     /**
+     * Matches names ignoring case sensitivity
+     * 
+     * @param keywords for searching
+     * @param wordsInName 
+     * @return
+     */
+    private static boolean keyMatchName(Collection<String> keywords, Set<String> wordsInName) {
+		for(String keyword: keywords){
+			for(String word: wordsInName){
+				if(keyword.equalsIgnoreCase(word)){
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	/**
      * Deletes person identified using last displayed index.
      *
      * @param commandArgs full command args string from the user
